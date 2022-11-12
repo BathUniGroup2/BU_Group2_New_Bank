@@ -4,21 +4,21 @@ import java.util.ArrayList;
 
 public class Customer {
 	
-	private ArrayList<Account> accounts;
+	private final ArrayList<Account> accounts;
 	
 	public Customer() {
 		accounts = new ArrayList<>();
 	}
 	
 	public String accountsToString() {
-		String s = "";
+		StringBuilder s = new StringBuilder();
 		for(Account a : accounts) {
-			s += a.toString();
+			s.append(a.toString());
 		}
-		return s;
+		return s.toString();
 	}
 
 	public void addAccount(Account account) {
-		accounts.add(account);		
+		accounts.add(account);
 	}
 }

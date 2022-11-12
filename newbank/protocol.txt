@@ -4,7 +4,7 @@ A customer enters the command below and sees the messages returned
 
 SHOWMYACCOUNTS
 Returns a list of all the customers accounts along with their current balance 
-e.g. Main: 1000.0 
+e.g. Main: 1000.00
 
 NEWACCOUNT <Name>
 e.g. NEWACCOUNT Savings
@@ -14,6 +14,7 @@ MOVE <Amount> <From> <To>
 e.g. MOVE 100 Main Savings 
 Returns SUCCESS or FAIL
 
-PAY <Person/Company> <Ammount>
+PAY <Person/Company> <Amount>
 e.g. PAY John 100
 Returns SUCCESS or FAIL
+

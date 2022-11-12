@@ -1,5 +1,4 @@
 package newbank.client;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,44 +8,47 @@ import java.net.UnknownHostException;
 
 public class ExampleClient extends Thread{
 	
-	private Socket server;
-	private PrintWriter bankServerOut;	
-	private BufferedReader userInput;
-	private Thread bankServerResponceThread;
-	
+	private final Socket server;
+	private final PrintWriter bankServerOut;
+	private final BufferedReader userInput;
+
 	public ExampleClient(String ip, int port) throws UnknownHostException, IOException {
 		server = new Socket(ip,port);
 		userInput = new BufferedReader(new InputStreamReader(System.in)); 
-		bankServerOut = new PrintWriter(server.getOutputStream(), true); 
-		
-		bankServerResponceThread = new Thread() {
-			private BufferedReader bankServerIn = new BufferedReader(new InputStreamReader(server.getInputStream())); 
+		bankServerOut = new PrintWriter(server.getOutputStream(), true);
+
+		Thread bankServerResponseThread = new Thread() {
+			private final BufferedReader bankServerIn = new BufferedReader(new InputStreamReader(server.getInputStream()));
+
 			public void run() {
-				try {
-					while(true) {
-						String responce = bankServerIn.readLine();
-						System.out.println(responce);
+				while (true) {
+					try {
+						{
+							String response = bankServerIn.readLine();
+							System.out.println(response);
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+						return;
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
-					return;
 				}
 			}
 		};
-		bankServerResponceThread.start();
+		bankServerResponseThread.start();
 	}
 	
 	
 	public void run() {
-		while(true) {
+		while (true) {
 			try {
-				while(true) {
+				{
 					String command = userInput.readLine();
 					bankServerOut.println(command);
 				}				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				return;
 			}
 		}
 	}
