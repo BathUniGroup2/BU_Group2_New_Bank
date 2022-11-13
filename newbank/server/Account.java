@@ -2,8 +2,8 @@ package newbank.server;
 
 public class Account {
 	
-	private final String accountName;
-	private final double openingBalance;
+	private String accountName;
+	private double openingBalance;
 
 	public Account(String accountName, double openingBalance) {
 		this.accountName = accountName;

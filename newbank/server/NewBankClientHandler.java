@@ -8,9 +8,9 @@ import java.net.Socket;
 
 public class NewBankClientHandler extends Thread{
 	
-	private final NewBank bank;
-	private final BufferedReader in;
-	private final PrintWriter out;
+	private NewBank bank;
+	private BufferedReader in;
+	private PrintWriter out;
 	
 	
 	public NewBankClientHandler(Socket s) throws IOException {
@@ -22,7 +22,7 @@ public class NewBankClientHandler extends Thread{
 	public void run() {
 		// keep getting requests from the client and processing them
 		try {
-			// ask for username
+			// ask for user name
 			out.println("Enter Username");
 			String userName = in.readLine();
 			// ask for password
@@ -37,11 +37,8 @@ public class NewBankClientHandler extends Thread{
 				while(true) {
 					String request = in.readLine();
 					System.out.println("Request from " + customer.getKey());
-					String response = bank.processRequest(customer, request);
-					out.println(response);
-					if (request.equals("Quit")) {
-						break;
-					}
+					String responce = bank.processRequest(customer, request);
+					out.println(responce);
 				}
 			}
 			else {
