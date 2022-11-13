@@ -1,17 +1,41 @@
 package newbank.server;
 
 public class Account {
-	
-	private String accountName;
-	private double openingBalance;
+	public enum AccountType {
+		MAIN("Main"),
+		SAVINGS("Savings"),
+		CHECKING("Checking");
 
-	public Account(String accountName, double openingBalance) {
-		this.accountName = accountName;
+		private final String type;
+
+		AccountType(String type) {
+			this.type = type;
+		}
+
+		public String toString() {
+			return type;
+		}
+	}
+	private final AccountType type;
+	private final double openingBalance;
+
+	public Account(AccountType type, double openingBalance) {
+		this.type = type;
 		this.openingBalance = openingBalance;
 	}
 	
 	public String toString() {
-		return (accountName + ": " + openingBalance);
+		return (type.toString() + ": " + openingBalance);
 	}
 
+	public AccountType getAccountType() { return type; }
+
+	public static AccountType stringToAccountType(String type) throws Exception {
+		return switch (type) {
+			case "Main" -> AccountType.MAIN;
+			case "Savings" -> AccountType.SAVINGS;
+			case "Checking" -> AccountType.CHECKING;
+			default -> throw new Exception();
+		};
+	}
 }
