@@ -49,6 +49,10 @@ public class NewBankClientHandler extends Thread{
 						}
 
 						System.out.println("Request from " + customer.getKey());
+            // a break condition to exit the banking loop
+					  if (arg.equals("QUIT")) {
+						  break; 
+              }
 						String response = bank.processRequest(customer, request, arg);
 						out.println(response);
 					}
