@@ -8,9 +8,8 @@ public class NewBank {
 	final static String SHOWMYACCOUNTS = "SHOWMYACCOUNTS";
 	final static String FAIL = "FAIL";
 
-
 	private static final NewBank bank = new NewBank();
-	private final HashMap<String,Customer> customers;
+	private HashMap<String,Customer> customers;
 	
 	private NewBank() {
 		customers = new HashMap<>();
@@ -44,16 +43,18 @@ public class NewBank {
 
 	// commands from the NewBank customer are processed in this method
 	public synchronized String processRequest(CustomerID customer, String request) {
-		if(customers.containsKey(customer.key())) {
-			switch (request) {
-				case SHOWMYACCOUNTS : return showMyAccounts(customer);
-				default: return FAIL;
+
+		if(customers.containsKey(customer.getKey())) {
+			switch(request) {
+			case "SHOWMYACCOUNTS" : return showMyAccounts(customer);
+			default : return "FAIL";
 			}
-		} return FAIL;
+		}
+		return "FAIL";
 	}
 
 	private String showMyAccounts(CustomerID customer) {
-		return (customers.get(customer.key())).accountsToString();
+		return (customers.get(customer.getKey())).accountsToString();
 	}
 
 }
