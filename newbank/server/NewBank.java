@@ -44,17 +44,16 @@ public class NewBank {
 
 	// commands from the NewBank customer are processed in this method
 	public synchronized String processRequest(CustomerID customer, String request) {
-		if(customers.containsKey(customer.getKey())) {
-			if (SHOWMYACCOUNTS.equals(request)) {
-				return showMyAccounts(customer);
+		if(customers.containsKey(customer.key())) {
+			switch (request) {
+				case SHOWMYACCOUNTS : return showMyAccounts(customer);
+				default: return FAIL;
 			}
-			else return FAIL;
-		}
-		else return FAIL;
+		} return FAIL;
 	}
-	
+
 	private String showMyAccounts(CustomerID customer) {
-		return (customers.get(customer.getKey())).accountsToString();
+		return (customers.get(customer.key())).accountsToString();
 	}
 
 }

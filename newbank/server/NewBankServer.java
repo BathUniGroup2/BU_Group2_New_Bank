@@ -6,7 +6,7 @@ import java.net.Socket;
 
 public class NewBankServer extends Thread{
 	
-	private ServerSocket server;
+	private final ServerSocket server;
 	
 	public NewBankServer(int port) throws IOException {
 		server = new ServerSocket(port);
@@ -20,6 +20,11 @@ public class NewBankServer extends Thread{
 				Socket s = server.accept();
 				NewBankClientHandler clientHandler = new NewBankClientHandler(s);
 				clientHandler.start();
+				// an escape clause to allow for loop to be closed in case of interruption
+				if (clientHandler.isInterrupted()) {
+					System.out.println("Client Handler Thread Interrupted");
+					break;
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

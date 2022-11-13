@@ -8,9 +8,9 @@ import java.net.Socket;
 
 public class NewBankClientHandler extends Thread{
 	
-	private NewBank bank;
-	private BufferedReader in;
-	private PrintWriter out;
+	private final NewBank bank;
+	private final BufferedReader in;
+	private final PrintWriter out;
 	
 	
 	public NewBankClientHandler(Socket s) throws IOException {
@@ -36,9 +36,13 @@ public class NewBankClientHandler extends Thread{
 				out.println("Log In Successful. What do you want to do?");
 				while(true) {
 					String request = in.readLine();
-					System.out.println("Request from " + customer.getKey());
+					System.out.println("Request from " + customer.key());
 					String response = bank.processRequest(customer, request);
 					out.println(response);
+					// a break condition to exit the banking loop
+					if (response.equals("Quit")) {
+						break;
+					}
 				}
 			}
 			else {
