@@ -2,7 +2,7 @@
 
 Consists of server and command line client interface
 
-With both server and client running locally, client can input commands to interact with the service
+With both server and client running locally, user can input commands to interact with the service
 
 Some commands require command line arguments to function in the format `COMMAND argument`
 
