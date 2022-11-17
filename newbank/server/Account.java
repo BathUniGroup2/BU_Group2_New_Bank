@@ -23,6 +23,8 @@ public class Account {
 		this.type = type;
 		this.openingBalance = openingBalance;
 	}
+
+	public double getBalance() { return openingBalance; }
 	
 	public String toString() {
 		return (type.toString() + ": " + openingBalance);

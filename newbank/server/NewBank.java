@@ -39,11 +39,12 @@ public class NewBank {
 	}
 
 	// commands from the NewBank customer are processed in this method
-	public synchronized String processRequest(CustomerID customer, String request, String arg) {
+	public synchronized String processRequest(CustomerID customer, String request, String arg, String arg2, String arg3) {
 		if(customers.containsKey(customer.getKey())) {
 			switch(request) {
 				case "SHOWMYACCOUNTS" : return showMyAccounts(customer);
 				case "NEWACCOUNT" : return newAccount(customer, arg);
+				case "MOVE" : return Move(customer, arg, arg2, arg3);
 				default : return "FAIL";
 			}
 		}
@@ -75,6 +76,47 @@ public class NewBank {
 		} catch(Exception e) {
 			return "FAIL";
 		}
+	}
+
+	private String Move(CustomerID customer, String from, String to, String amount) {
+        // Fail if missing argument from move functionality
+		if (from.length() < 1) return "FAIL";
+		if (to.length() < 1) return "FAIL";
+		if (amount.length() < 1) return "FAIL";
+
+		Customer currentCustomer = customers.get(customer.getKey());
+		ArrayList<Account> currentAccounts = currentCustomer.getAccounts();
+		double amountDouble = Double.parseDouble(amount);
+
+		// Fail if user only has one account type
+		if (currentAccounts.size() < 2) return "FAIL";
+		
+		// Check if to and from accounts exist if not fail
+		// Once exist check if sufficient balance for transfer
+		for (int i = 0; i < currentAccounts.size(); i++) {
+			Account.AccountType fromAccountType = currentAccounts.get(i).getAccountType();
+			Account fromAccount = currentAccounts.get(i);
+			if (fromAccountType.toString().equals(from)){
+
+				// Search for account to transfer
+				for (int j = 0; j < currentAccounts.size(); j++) {
+					Account.AccountType toAccountType = currentAccounts.get(j).getAccountType();
+					Account toAccount = currentAccounts.get(j);
+
+					if (toAccountType.toString().equals(to)){
+						if (fromAccount.getBalance() < amountDouble) {
+							return "FAIL";
+						} else {
+							currentAccounts.set(i, new Account(fromAccountType, fromAccount.getBalance() - amountDouble));
+							currentAccounts.set(j, new Account(toAccountType, toAccount.getBalance() + amountDouble));
+							return "SUCCESS";
+						}
+					}
+				}
+			}
+		} 
+		
+		return "FAIL";
 	}
 
 }

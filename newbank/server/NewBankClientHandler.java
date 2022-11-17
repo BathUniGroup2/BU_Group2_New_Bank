@@ -43,9 +43,17 @@ public class NewBankClientHandler extends Thread{
 						String[] inputArray = input.split(" ");
 						String request = inputArray[0];
 						String arg = "";
+						String arg2 = "";
+						String arg3 = "";
 
-						if (inputArray.length > 1) {
+						if (inputArray.length == 2) {
 							arg = inputArray[1];
+						} else if (inputArray.length == 4){
+							arg = inputArray[1];
+							arg2 = inputArray[2];
+							arg3 = inputArray[3];
+						} else {
+							System.out.println("FAIL");
 						}
 
 						System.out.println("Request from " + customer.getKey());
@@ -53,7 +61,7 @@ public class NewBankClientHandler extends Thread{
 					  if (arg.equals("QUIT")) {
 						  break; 
               }
-						String response = bank.processRequest(customer, request, arg);
+						String response = bank.processRequest(customer, request, arg, arg2, arg3);
 						out.println(response);
 					}
 				}
