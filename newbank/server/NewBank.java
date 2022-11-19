@@ -80,9 +80,7 @@ public class NewBank {
 
 	private String Move(CustomerID customer, String from, String to, String amount) {
         // Fail if missing argument from move functionality
-		if (from.length() < 1) return "FAIL";
-		if (to.length() < 1) return "FAIL";
-		if (amount.length() < 1) return "FAIL";
+		if (from.length() < 1 || to.length() < 1 || amount.length() < 1) return "FAIL";
 
 		Customer currentCustomer = customers.get(customer.getKey());
 		ArrayList<Account> currentAccounts = currentCustomer.getAccounts();
@@ -93,30 +91,36 @@ public class NewBank {
 		
 		// Check if to and from accounts exist if not fail
 		// Once exist check if sufficient balance for transfer
+		int counter = 0;
+		int fromIndex = 0;
+		int toIndex = 0;
+
 		for (int i = 0; i < currentAccounts.size(); i++) {
-			Account.AccountType fromAccountType = currentAccounts.get(i).getAccountType();
-			Account fromAccount = currentAccounts.get(i);
-			if (fromAccountType.toString().equals(from)){
-
-				// Search for account to transfer
-				for (int j = 0; j < currentAccounts.size(); j++) {
-					Account.AccountType toAccountType = currentAccounts.get(j).getAccountType();
-					Account toAccount = currentAccounts.get(j);
-
-					if (toAccountType.toString().equals(to)){
-						if (fromAccount.getBalance() < amountDouble) {
-							return "FAIL";
-						} else {
-							currentAccounts.set(i, new Account(fromAccountType, fromAccount.getBalance() - amountDouble));
-							currentAccounts.set(j, new Account(toAccountType, toAccount.getBalance() + amountDouble));
-							return "SUCCESS";
-						}
-					}
+			Account checkAccount = currentAccounts.get(i);
+			Account.AccountType checkAccountType = checkAccount.getAccountType();
+			if (checkAccountType.toString().equals(from)){
+				if (checkAccount.getBalance() < amountDouble) {
+					return "FAIL";
+				} else {
+					counter += 1;
+					fromIndex = i;
 				}
-			}
-		} 
-		
-		return "FAIL";
-	}
+			} else if (checkAccountType.toString().equals(to)){
+				counter += 1;
+				toIndex = i;
+			} else return "FAIL";
+		}
 
+		if (counter != 2) return "FAIL";
+
+		// Move amount from original account to new account
+		try {
+			currentAccounts.set(fromIndex, new Account(Account.stringToAccountType(from), currentAccounts.get(fromIndex).getBalance() - amountDouble));
+			currentAccounts.set(toIndex, new Account(Account.stringToAccountType(to), currentAccounts.get(toIndex).getBalance() + amountDouble));
+			return "SUCCESS";
+		} catch(Exception e) {
+			return "FAIL";
+		}
+		
+	}
 }
