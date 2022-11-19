@@ -40,4 +40,14 @@ public class Account {
 			default -> throw new Exception();
 		};
 	}
+
+	public double updateBalance(char operand, double amountDouble) {
+		double newBalance = 0;
+		if (operand == '+'){
+			newBalance = openingBalance + amountDouble;
+		} else if (operand == '-'){
+		 	newBalance = openingBalance - amountDouble;
+		}
+		return newBalance;
+	}
 }

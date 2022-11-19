@@ -91,9 +91,10 @@ public class NewBank {
 		
 		// Check if to and from accounts exist if not fail
 		// Once exist check if sufficient balance for transfer
-		int counter = 0;
 		int fromIndex = 0;
 		int toIndex = 0;
+		Account fromMatch = null;
+		Account toMatch = null;
 
 		for (int i = 0; i < currentAccounts.size(); i++) {
 			Account checkAccount = currentAccounts.get(i);
@@ -102,25 +103,25 @@ public class NewBank {
 				if (checkAccount.getBalance() < amountDouble) {
 					return "FAIL";
 				} else {
-					counter += 1;
+					fromMatch = new Account(checkAccountType, checkAccount.updateBalance('-', amountDouble));
 					fromIndex = i;
 				}
 			} else if (checkAccountType.toString().equals(to)){
-				counter += 1;
+				toMatch = new Account(checkAccountType, checkAccount.updateBalance('+', amountDouble));
 				toIndex = i;
 			} else return "FAIL";
 		}
 
-		if (counter != 2) return "FAIL";
+		if (fromMatch == null || toMatch == null) return "FAIL";
 
 		// Move amount from original account to new account
 		try {
-			currentAccounts.set(fromIndex, new Account(Account.stringToAccountType(from), currentAccounts.get(fromIndex).getBalance() - amountDouble));
-			currentAccounts.set(toIndex, new Account(Account.stringToAccountType(to), currentAccounts.get(toIndex).getBalance() + amountDouble));
+			currentAccounts.set(fromIndex, fromMatch);
+			currentAccounts.set(toIndex, toMatch);
 			return "SUCCESS";
 		} catch(Exception e) {
 			return "FAIL";
 		}
-		
+
 	}
 }
