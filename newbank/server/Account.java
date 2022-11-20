@@ -23,6 +23,8 @@ public class Account {
 		this.type = type;
 		this.openingBalance = openingBalance;
 	}
+
+	public double getBalance() { return openingBalance; }
 	
 	public String toString() {
 		return (type.toString() + ": " + openingBalance);
@@ -37,5 +39,15 @@ public class Account {
 			case "Checking" -> AccountType.CHECKING;
 			default -> throw new Exception();
 		};
+	}
+
+	public double updateBalance(char operand, double amountDouble) {
+		double newBalance = 0;
+		if (operand == '+'){
+			newBalance = openingBalance + amountDouble;
+		} else if (operand == '-'){
+		 	newBalance = openingBalance - amountDouble;
+		}
+		return newBalance;
 	}
 }
