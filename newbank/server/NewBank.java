@@ -39,12 +39,12 @@ public class NewBank {
 	}
 
 	// commands from the NewBank customer are processed in this method
-	public synchronized String processRequest(CustomerID customer, String request, String arg, String arg2, String arg3) {
+	public synchronized String processRequest(CustomerID customer, String request, String[] args) {
 		if(customers.containsKey(customer.getKey())) {
 			switch(request) {
 				case "SHOWMYACCOUNTS" : return showMyAccounts(customer);
-				case "NEWACCOUNT" : return newAccount(customer, arg);
-				case "MOVE" : return Move(customer, arg, arg2, arg3);
+				case "NEWACCOUNT" : return newAccount(customer, args);
+				case "MOVE" : return Move(customer, args);
 				default : return "FAIL";
 			}
 		}
@@ -55,7 +55,8 @@ public class NewBank {
 		return (customers.get(customer.getKey())).accountsToString();
 	}
 
-	private String newAccount(CustomerID customer, String accountType) {
+	private String newAccount(CustomerID customer, String[] accountTypes) {
+		String accountType = accountTypes[0];
 		// Fail if no account type argument was given
 		if (accountType.length() < 1) return "FAIL";
 
@@ -78,7 +79,11 @@ public class NewBank {
 		}
 	}
 
-	private String Move(CustomerID customer, String from, String to, String amount) {
+	private String Move(CustomerID customer, String[] args) {
+		String from = args[0];
+		String to = args[1];
+		String amount = args[2];
+
         // Fail if missing argument from move functionality
 		if (from.length() < 1 || to.length() < 1 || amount.length() < 1) return "FAIL";
 
