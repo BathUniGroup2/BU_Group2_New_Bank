@@ -45,9 +45,9 @@ public class NewBank {
 
 			//TODO: all variables below should come from user input in UI
 			//the temporary variables below are for testing only:
-			String acc_type_customer = "MAIN";
+			String acc_type_customer = "Main";
 			String payee = "John";
-			String acc_type_payee = "MAIL";
+			String acc_type_payee = "Main";
 			String amount = "100.00";
 
 			return switch (request) {
