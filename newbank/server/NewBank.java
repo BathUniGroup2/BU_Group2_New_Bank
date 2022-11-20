@@ -43,16 +43,17 @@ public class NewBank {
 	public synchronized String processRequest(CustomerID customer, String request) {
 		if(customers.containsKey(customer.key())) {
 
-			//TODO: type, payee and amount should come from user input in UI
+			//TODO: all variables below should come from user input in UI
 			//the temporary variables below are for testing only:
-			String acc_type = "MAIN";
+			String acc_type_customer = "MAIN";
 			String payee = "John";
+			String acc_type_payee = "MAIL";
 			String amount = "100.00";
 
 			return switch (request) {
 				case "SHOWMYACCOUNTS" -> showMyAccounts(customer);
-				case "NEWACCOUNT" -> newAccount(customer, acc_type);
-				case "PAY" -> pay(customer,payee, amount);
+				case "NEWACCOUNT" -> newAccount(customer, acc_type_customer);
+				case "PAY" -> pay(customer,acc_type_customer, payee, acc_type_payee, amount);
 				default -> "FAIL";
 			};
 		}
@@ -104,26 +105,46 @@ public class NewBank {
 	/**
 	 * Transfer money from one account to another
 	 * @param customer CustomerID of the customer making the payment
+	 * @param customerAccountType Type of the account to transfer from
 	 * @param payee String of the payee's name
+	 * @param payeeAccountType String of the payee's account type
 	 * @param amount String of the amount to be paid
 	 * @return String of "SUCCESS" or "FAIL"
 	 */
-	private String pay(CustomerID customer, String payee, String amount) {
-		// Fail if no payee or amount argument was given
-		if (payee.length() < 1 || amount.length() < 1) return "FAIL";
+	private String pay(CustomerID customer, String customerAccountType, String payee, String payeeAccountType,
+					   String amount) {
+		// Fail if no payee, account or amount argument was given
+		if (payee.length() < 1 || customerAccountType.length() < 1 ||
+				amount.length() < 1 || payeeAccountType.length() < 1) return "FAIL";
 
 		Customer currentCustomer = customers.get(customer.key());
 		ArrayList<Account> currentAccounts = currentCustomer.getAccounts();
 
 		// Fail if customer has no accounts
 		if (currentAccounts.size() < 1) return "FAIL";
-
-		// Fail if customer has no account with sufficient funds
 		for (Account currentAccount : currentAccounts) {
-			if (currentAccount.getBalance() >= Double.parseDouble(amount)) {
+			// Fail if customer has no account of corresponding to customerAccountType
+			if (currentAccount.getAccountType().toString().equals(customerAccountType)) {
+				// Fail if customer has no sufficient funds in the selected account
+				if (currentAccount.getBalance() < Double.parseDouble(amount)) return "FAIL";
 				currentAccount.setBalance(currentAccount.getBalance() - Double.parseDouble(amount));
-			} else return "FAIL";
-		}
+			} else return "FAIL";}
+
+		// If the payee is a customer of the bank, transfer the money to their account
+		if (customers.containsKey(payee)) {
+			Customer payeeCustomer = customers.get(payee);
+			ArrayList<Account> payeeAccounts = payeeCustomer.getAccounts();
+			// Fail if payee has no accounts
+			if (payeeAccounts.size() < 1) return "FAIL";
+			for (Account payeeAccount : payeeAccounts) {
+				// Fail if payee has no account of corresponding to payeeAccountType
+				if (payeeAccount.getAccountType().toString().equals(payeeAccountType)) {
+					payeeAccount.setBalance(payeeAccount.getBalance() + Double.parseDouble(amount));
+				} else return "FAIL";
+			}
+		// no functionality to transfer money outside the bank requested
+		} else return "FAIL";
+
 	// succeed if no condition above fails
 	 return "SUCCESS";
 	}
