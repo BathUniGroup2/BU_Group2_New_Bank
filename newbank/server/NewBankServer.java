@@ -20,7 +20,11 @@ public class NewBankServer extends Thread{
 				Socket s = server.accept();
 				NewBankClientHandler clientHandler = new NewBankClientHandler(s);
 				clientHandler.start();
-				// some condition is needed to close the server
+				// an escape clause to allow for loop to be closed in case of interruption
+				if (clientHandler.isInterrupted()) {
+					System.out.println("Client Handler Thread Interrupted");
+					break;
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -35,13 +35,26 @@ public class NewBankClientHandler extends Thread{
 			if(customer != null) {
 				out.println("Log In Successful. What do you want to do?");
 				while(true) {
-					String request = in.readLine();
-					System.out.println("Request from " + customer.key());
-					String response = bank.processRequest(customer, request);
-					out.println(response);
-					// a break condition to exit the banking loop
-					if (response.equals("QUIT")) {
-						break;
+					String input = in.readLine();
+					if (input.length() < 1) {
+						out.println("Command required, try again. What do you want to do?");
+					} else{
+						// To allow for a CMD arg we split by space
+						String[] inputArray = input.split(" ");
+						String request = inputArray[0];
+						String arg = "";
+
+						if (inputArray.length > 1) {
+							arg = inputArray[1];
+						}
+
+						System.out.println("Request from " + customer.getKey());
+            // a break condition to exit the banking loop
+					  if (arg.equals("QUIT")) {
+						  break; 
+              }
+						String response = bank.processRequest(customer, request, arg);
+						out.println(response);
 					}
 				}
 			}

@@ -14,3 +14,4 @@ Commands are case sensitive (must be uppercase)
 | -------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | SHOWMYACCOUNTS | n/a                                         | Outputs all accounts owned by user stored in the system and their respective balance                                        |
 | NEWACCOUNT     | accountType (`Main`, `Savings`, `Checking`) | Creates a new account for the user in the system, outputs `SUCCESS` or `FAIL` (user may only have one type of each account) |
+| QUIT | n/a                                         | Quits the program                                        |
