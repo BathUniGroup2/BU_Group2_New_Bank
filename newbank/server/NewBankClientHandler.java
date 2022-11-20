@@ -7,22 +7,22 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class NewBankClientHandler extends Thread{
-
+	
 	private final NewBank bank;
 	private final BufferedReader in;
 	private final PrintWriter out;
-
-
+	
+	
 	public NewBankClientHandler(Socket s) throws IOException {
 		bank = NewBank.getBank();
 		in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 		out = new PrintWriter(s.getOutputStream(), true);
 	}
-
+	
 	public void run() {
 		// keep getting requests from the client and processing them
 		try {
-			// ask for user name
+			// ask for username
 			out.println("Enter Username");
 			String userName = in.readLine();
 			// ask for password
@@ -31,26 +31,17 @@ public class NewBankClientHandler extends Thread{
 			out.println("Checking Details...");
 			// authenticate user and get customer ID token from bank for use in subsequent requests
 			CustomerID customer = bank.checkLogInDetails(userName, password);
-			// if the user is authenticated then get requests from the user and process them
+			// if the user is authenticated then get requests from the user and process them 
 			if(customer != null) {
 				out.println("Log In Successful. What do you want to do?");
 				while(true) {
-					String input = in.readLine();
-					if (input.length() < 1) {
-						out.println("Command required, try again. What do you want to do?");
-					} else{
-						// To allow for a CMD arg we split by space
-						String[] inputArray = input.split(" ");
-						String request = inputArray[0];
-						String arg = "";
-
-						if (inputArray.length > 1) {
-							arg = inputArray[1];
-						}
-
-						System.out.println("Request from " + customer.getKey());
-						String response = bank.processRequest(customer, request, arg);
-						out.println(response);
+					String request = in.readLine();
+					System.out.println("Request from " + customer.key());
+					String response = bank.processRequest(customer, request);
+					out.println(response);
+					// a break condition to exit the banking loop
+					if (response.equals("QUIT")) {
+						break;
 					}
 				}
 			}
@@ -70,4 +61,5 @@ public class NewBankClientHandler extends Thread{
 			}
 		}
 	}
+
 }

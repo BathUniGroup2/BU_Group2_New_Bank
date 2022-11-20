@@ -20,6 +20,7 @@ public class NewBankServer extends Thread{
 				Socket s = server.accept();
 				NewBankClientHandler clientHandler = new NewBankClientHandler(s);
 				clientHandler.start();
+				// some condition is needed to close the server
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
