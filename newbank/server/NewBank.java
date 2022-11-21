@@ -40,22 +40,12 @@ public class NewBank {
 	}
 
 	// commands from the NewBank customer are processed in this method
-	public synchronized String processRequest(CustomerID customer, String request) {
-		if(customers.containsKey(customer.key())) {
-
-			//TODO: all variables below should come from user input in UI
-			//the temporary variables below are for testing only:
-			String acc_type_customer = "Main";
-			String payee = "John";
-			String acc_type_payee = "Main";
-			String amount = "100.00";
-
 			return switch (request) {
 				case "SHOWMYACCOUNTS" -> showMyAccounts(customer);
 				case "NEWACCOUNT" -> newAccount(customer, acc_type_customer);
 				case "PAY" -> pay(customer,acc_type_customer, payee, acc_type_payee, amount);
 				default -> "FAIL";
-			};
+			}
 		}
 		return "FAIL";
 	}
@@ -78,8 +68,8 @@ public class NewBank {
 		return String.join("\n", accountList);
 	}
 
-
-	private String newAccount(CustomerID customer, String accountType) {
+	private String newAccount(CustomerID customer, String[] accountTypes) {
+		String accountType = accountTypes[0];
 		// Fail if no account type argument was given
 		if (accountType.length() < 1) return "FAIL";
 
@@ -158,6 +148,55 @@ public class NewBank {
 
 	// succeed if no condition above fails
 	 return "SUCCESS";
+
+private String Move(CustomerID customer, String[] args) {
+		String from = args[0];
+		String to = args[1];
+		String amount = args[2];
+
+        // Fail if missing argument from move functionality
+		if (from.length() < 1 || to.length() < 1 || amount.length() < 1) return "FAIL";
+
+		Customer currentCustomer = customers.get(customer.getKey());
+		ArrayList<Account> currentAccounts = currentCustomer.getAccounts();
+		double amountDouble = Double.parseDouble(amount);
+
+		// Fail if user only has one account type
+		if (currentAccounts.size() < 2) return "FAIL";
+		
+		// Check if to and from accounts exist if not fail
+		// Once exist check if sufficient balance for transfer
+		int fromIndex = 0;
+		int toIndex = 0;
+		Account fromMatch = null;
+		Account toMatch = null;
+
+		for (int i = 0; i < currentAccounts.size(); i++) {
+			Account checkAccount = currentAccounts.get(i);
+			Account.AccountType checkAccountType = checkAccount.getAccountType();
+			if (checkAccountType.toString().equals(from)){
+				if (checkAccount.getBalance() < amountDouble) {
+					return "FAIL";
+				} else {
+					fromMatch = new Account(checkAccountType, checkAccount.updateBalance('-', amountDouble));
+					fromIndex = i;
+				}
+			} else if (checkAccountType.toString().equals(to)){
+				toMatch = new Account(checkAccountType, checkAccount.updateBalance('+', amountDouble));
+				toIndex = i;
+			} else return "FAIL";
+		}
+
+		if (fromMatch == null || toMatch == null) return "FAIL";
+
+		// Move amount from original account to new account
+		try {
+			currentAccounts.set(fromIndex, fromMatch);
+			currentAccounts.set(toIndex, toMatch);
+			return "SUCCESS";
+		} catch(Exception e) {
+			return "FAIL";
+		}
 	}
 }
 

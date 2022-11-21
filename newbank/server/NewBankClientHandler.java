@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class NewBankClientHandler extends Thread{
 	
@@ -42,18 +43,17 @@ public class NewBankClientHandler extends Thread{
 						// To allow for a CMD arg we split by space
 						String[] inputArray = input.split(" ");
 						String request = inputArray[0];
-						String arg = "";
-
-						if (inputArray.length > 1) {
-							arg = inputArray[1];
-						}
+						String[] args = {};
+						if (inputArray.length == 2 || inputArray.length == 4) {
+							args = Arrays.copyOfRange(inputArray, 1, inputArray.length);
+						} 
 
 						System.out.println("Request from " + customer.getKey());
             // a break condition to exit the banking loop
-					  if (arg.equals("QUIT")) {
+					  if (request.equals("QUIT")) {
 						  break; 
               }
-						String response = bank.processRequest(customer, request, arg);
+						String response = bank.processRequest(customer, request, args);
 						out.println(response);
 					}
 				}
