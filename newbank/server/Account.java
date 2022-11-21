@@ -1,6 +1,7 @@
 package newbank.server;
 
 public class Account {
+
 	public enum AccountType {
 		MAIN("Main"),
 		SAVINGS("Savings"),
@@ -17,17 +18,25 @@ public class Account {
 		}
 	}
 	private final AccountType type;
-	private final double openingBalance;
+	private double balance;
+	
+	public double getBalance() {
+		return balance;
+	}
 
-	public Account(AccountType type, double openingBalance) {
+	public double setBalance(double amount) {
+		return balance = amount;
+	}
+
+	public Account(AccountType type, double balance) {
 		this.type = type;
-		this.openingBalance = openingBalance;
+		this.balance = balance;
 	}
 
 	public double getBalance() { return openingBalance; }
 	
 	public String toString() {
-		return (type.toString() + ": " + openingBalance);
+		return (type.toString() + ": " + balance);
 	}
 
 	public AccountType getAccountType() { return type; }

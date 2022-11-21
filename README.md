@@ -14,5 +14,6 @@ Commands are case sensitive (must be uppercase)
 | -------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | SHOWMYACCOUNTS | n/a                                         | Outputs all accounts owned by user stored in the system and their respective balance                                        |
 | NEWACCOUNT     | accountType (`Main`, `Savings`, `Checking`) | Creates a new account for the user in the system, outputs `SUCCESS` or `FAIL` (user may only have one type of each account) |
+| PAY |  CustomerID customer, String customerAccountType, String payee, String payeeAccountType,String amount | Transfers money to the specified account in the same bank if the account is found and the customer has enough money and returns `SUCCESS`. Otherwise returns `FAIL`  
 | MOVE           | MOVE(`Main`, `Savings`, 100)                | Takes in three arguments, the first is the account money is transferred out of. The second is the account money is transferred in. The last is the amount you'd like to transfer|
 | QUIT           | n/a                                         | Quits the program                                        |
