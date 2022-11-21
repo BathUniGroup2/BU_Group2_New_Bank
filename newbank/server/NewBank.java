@@ -120,28 +120,39 @@ public class NewBank {
 		Customer currentCustomer = customers.get(customer.key());
 		ArrayList<Account> currentAccounts = currentCustomer.getAccounts();
 
+		Account currentAccount = null;
 		// Fail if customer has no accounts
 		if (currentAccounts.size() < 1) return "FAIL";
-		for (Account currentAccount : currentAccounts) {
-			// Fail if customer has no account of corresponding to customerAccountType
-			if (currentAccount.getAccountType().toString().equals(customerAccountType)) {
+		// Fail if customer has no account of corresponding to customerAccountType
+		for (Account _currentAccount : currentAccounts) {
+			if (_currentAccount.getAccountType().toString().equals(customerAccountType)) {
 				// Fail if customer has no sufficient funds in the selected account
-				if (currentAccount.getBalance() < Double.parseDouble(amount)) return "FAIL";
-				currentAccount.setBalance(currentAccount.getBalance() - Double.parseDouble(amount));
-			} else return "FAIL";}
+				if (_currentAccount.getBalance() < Double.parseDouble(amount)) {
+					return "FAIL";
+				} else {
+					currentAccount = _currentAccount;
+				}
+			}
+		}
+		if (currentAccount == null) return "FAIL";
 
+
+		Account payeeAccount = null;
 		// If the payee is a customer of the bank, transfer the money to their account
 		if (customers.containsKey(payee)) {
 			Customer payeeCustomer = customers.get(payee);
 			ArrayList<Account> payeeAccounts = payeeCustomer.getAccounts();
 			// Fail if payee has no accounts
 			if (payeeAccounts.size() < 1) return "FAIL";
-			for (Account payeeAccount : payeeAccounts) {
-				// Fail if payee has no account of corresponding to payeeAccountType
-				if (payeeAccount.getAccountType().toString().equals(payeeAccountType)) {
+			// Fail if payee has no account of corresponding to payeeAccountType
+			for (Account _payeeAccount : payeeAccounts) {
+				if (_payeeAccount.getAccountType().toString().equals(payeeAccountType)) {
+					payeeAccount = _payeeAccount;
+					currentAccount.setBalance(currentAccount.getBalance() - Double.parseDouble(amount));
 					payeeAccount.setBalance(payeeAccount.getBalance() + Double.parseDouble(amount));
-				} else return "FAIL";
+				}
 			}
+			if (payeeAccount == null) return "FAIL";
 		// no functionality to transfer money outside the bank requested
 		} else return "FAIL";
 
