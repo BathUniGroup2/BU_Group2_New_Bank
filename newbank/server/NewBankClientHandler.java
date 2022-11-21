@@ -8,22 +8,22 @@ import java.net.Socket;
 import java.util.Arrays;
 
 public class NewBankClientHandler extends Thread{
-	
+
 	private final NewBank bank;
 	private final BufferedReader in;
 	private final PrintWriter out;
-	
-	
+
+
 	public NewBankClientHandler(Socket s) throws IOException {
 		bank = NewBank.getBank();
 		in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 		out = new PrintWriter(s.getOutputStream(), true);
 	}
-	
+
 	public void run() {
 		// keep getting requests from the client and processing them
 		try {
-			// ask for username
+			// ask for user name
 			out.println("Enter Username");
 			String userName = in.readLine();
 			// ask for password
@@ -32,7 +32,7 @@ public class NewBankClientHandler extends Thread{
 			out.println("Checking Details...");
 			// authenticate user and get customer ID token from bank for use in subsequent requests
 			CustomerID customer = bank.checkLogInDetails(userName, password);
-			// if the user is authenticated then get requests from the user and process them 
+			// if the user is authenticated then get requests from the user and process them
 			if(customer != null) {
 				out.println("Log In Successful. What do you want to do?");
 				while(true) {
@@ -74,5 +74,4 @@ public class NewBankClientHandler extends Thread{
 			}
 		}
 	}
-
 }
