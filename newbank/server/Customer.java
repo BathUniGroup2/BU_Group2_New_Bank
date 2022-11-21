@@ -11,15 +11,15 @@ public class Customer {
 	}
 
 	public String accountsToString() {
-		StringBuilder s = new StringBuilder();
+		String s = "";
 		for(Account a : accounts) {
-			if (s.toString().equals("")) {
-				s.append(a.toString());
+			if (s.equals("")) {
+				s += a.toString();
 				continue;
 			}
-			s.append(", ").append(a.toString());
+			s += ", " + a.toString();
 		}
-		return s.toString();
+		return s;
 	}
 
 	public ArrayList<Account> getAccounts() { return accounts; }
