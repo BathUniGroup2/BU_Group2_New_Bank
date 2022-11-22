@@ -1,13 +1,12 @@
 package newbank.server;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ArrayList;
 
 public class NewBank {
 
 	private static final NewBank bank = new NewBank();
-	private final HashMap<String,Customer> customers;
+	private final HashMap<String, Customer> customers;
 
 	private NewBank() {
 		customers = new HashMap<>();
@@ -33,25 +32,28 @@ public class NewBank {
 	}
 
 	public synchronized CustomerID checkLogInDetails(String userName, String password) {
-		if(customers.containsKey(userName)) {
+		if (customers.containsKey(userName)) {
 			return new CustomerID(userName);
 		}
 		return null;
 	}
 
 	// commands from the NewBank customer are processed in this method
+	public synchronized String processRequest(CustomerID customer, String request, String[] args) {
+		if (customers.containsKey(customer.key())) {
 			return switch (request) {
 				case "SHOWMYACCOUNTS" -> showMyAccounts(customer);
-				case "NEWACCOUNT" -> newAccount(customer, acc_type_customer);
-				case "PAY" -> pay(customer,acc_type_customer, payee, acc_type_payee, amount);
+				case "NEWACCOUNT" -> newAccount(customer, args);
+				case "PAY" -> pay(customer, args);
 				default -> "FAIL";
-			}
+			};
 		}
 		return "FAIL";
 	}
 
 	/**
 	 * This method is used to show the customer's accounts
+	 *
 	 * @param customer CustomerID of the customer
 	 * @return the names of the customer's accounts and their balances
 	 */
@@ -87,7 +89,7 @@ public class NewBank {
 			Account newAccount = new Account(Account.stringToAccountType(accountType), 0.00);
 			currentCustomer.addAccount(newAccount);
 			return "SUCCESS";
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return "FAIL";
 		}
 	}
@@ -95,14 +97,16 @@ public class NewBank {
 	/**
 	 * Transfer money from one account to another
 	 * @param customer CustomerID of the customer making the payment
-	 * @param customerAccountType Type of the account to transfer from
-	 * @param payee String of the payee's name
-	 * @param payeeAccountType String of the payee's account type
-	 * @param amount String of the amount to be paid
+	 * @param args The arguments for the transfer (customerAccountType, payee, payeeAccountType, amount)
 	 * @return String of "SUCCESS" or "FAIL"
 	 */
-	private String pay(CustomerID customer, String customerAccountType, String payee, String payeeAccountType,
-					   String amount) {
+	private String pay(CustomerID customer, String[] args)
+	{
+		String customerAccountType = args[0];
+		String payee = args[1];
+		String payeeAccountType = args[2];
+		String amount = args[3];
+
 		// Fail if no payee, account or amount argument was given
 		if (payee.length() < 1 || customerAccountType.length() < 1 ||
 				amount.length() < 1 || payeeAccountType.length() < 1) return "FAIL";
@@ -143,60 +147,10 @@ public class NewBank {
 				}
 			}
 			if (payeeAccount == null) return "FAIL";
-		// no functionality to transfer money outside the bank requested
+			// no functionality to transfer money outside the bank requested
 		} else return "FAIL";
 
-	// succeed if no condition above fails
-	 return "SUCCESS";
-
-private String Move(CustomerID customer, String[] args) {
-		String from = args[0];
-		String to = args[1];
-		String amount = args[2];
-
-        // Fail if missing argument from move functionality
-		if (from.length() < 1 || to.length() < 1 || amount.length() < 1) return "FAIL";
-
-		Customer currentCustomer = customers.get(customer.getKey());
-		ArrayList<Account> currentAccounts = currentCustomer.getAccounts();
-		double amountDouble = Double.parseDouble(amount);
-
-		// Fail if user only has one account type
-		if (currentAccounts.size() < 2) return "FAIL";
-		
-		// Check if to and from accounts exist if not fail
-		// Once exist check if sufficient balance for transfer
-		int fromIndex = 0;
-		int toIndex = 0;
-		Account fromMatch = null;
-		Account toMatch = null;
-
-		for (int i = 0; i < currentAccounts.size(); i++) {
-			Account checkAccount = currentAccounts.get(i);
-			Account.AccountType checkAccountType = checkAccount.getAccountType();
-			if (checkAccountType.toString().equals(from)){
-				if (checkAccount.getBalance() < amountDouble) {
-					return "FAIL";
-				} else {
-					fromMatch = new Account(checkAccountType, checkAccount.updateBalance('-', amountDouble));
-					fromIndex = i;
-				}
-			} else if (checkAccountType.toString().equals(to)){
-				toMatch = new Account(checkAccountType, checkAccount.updateBalance('+', amountDouble));
-				toIndex = i;
-			} else return "FAIL";
-		}
-
-		if (fromMatch == null || toMatch == null) return "FAIL";
-
-		// Move amount from original account to new account
-		try {
-			currentAccounts.set(fromIndex, fromMatch);
-			currentAccounts.set(toIndex, toMatch);
-			return "SUCCESS";
-		} catch(Exception e) {
-			return "FAIL";
-		}
+		// succeed if no condition above fails
+		return "SUCCESS";
 	}
 }
-

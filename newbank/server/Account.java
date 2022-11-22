@@ -32,8 +32,6 @@ public class Account {
 		this.type = type;
 		this.balance = balance;
 	}
-
-	public double getBalance() { return openingBalance; }
 	
 	public String toString() {
 		return (type.toString() + ": " + balance);
@@ -53,9 +51,9 @@ public class Account {
 	public double updateBalance(char operand, double amountDouble) {
 		double newBalance = 0;
 		if (operand == '+'){
-			newBalance = openingBalance + amountDouble;
+			newBalance = balance + amountDouble;
 		} else if (operand == '-'){
-		 	newBalance = openingBalance - amountDouble;
+		 	newBalance = balance - amountDouble;
 		}
 		return newBalance;
 	}
