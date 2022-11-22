@@ -1,4 +1,4 @@
-package newbank.server;
+package com.server;
 // no explicit boilerplate constructor needed if a record is used to store the record
 
 public class CustomerID {
