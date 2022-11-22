@@ -48,7 +48,7 @@ public class NewBankClientHandler extends Thread{
 							args = Arrays.copyOfRange(inputArray, 1, inputArray.length);
 						} 
 
-						System.out.println("Request from " + customer.key());
+						System.out.println("Request from " + customer.getKey());
             // a break condition to exit the banking loop
 					  if (request.equals("QUIT")) {
 						  break; 
