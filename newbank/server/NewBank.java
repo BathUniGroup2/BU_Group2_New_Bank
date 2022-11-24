@@ -45,6 +45,7 @@ public class NewBank {
 				case "SHOWMYACCOUNTS" : return showMyAccounts(customer);
 				case "NEWACCOUNT" : return newAccount(customer, args);
 				case "MOVE" : return Move(customer, args);
+				case "PAY" : return pay(customer, args);
 				default : return "FAIL";
 			}
 		}
