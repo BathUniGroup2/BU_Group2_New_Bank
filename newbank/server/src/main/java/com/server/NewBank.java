@@ -1,4 +1,4 @@
-package newbank.server;
+package com.server;
 
 import java.util.HashMap;
 import java.util.ArrayList;
