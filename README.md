@@ -11,6 +11,7 @@ The server project uses the Maven build tool, the client project is currently a 
 - Maven must be installed to build and run server
   - Directly available https://maven.apache.org/
   - Via HomeBrew `brew install maven`
+  - Command for Linux 'sudo pacman -S maven' for Arch, 'apt-get install maven' for Ubuntu/Debian
 - Install VSCode extension, Extension Pack for Java
 - After opening Server project, on sidebar you should open Maven dropdown panel
   - Click play button by `clean` command
@@ -18,13 +19,29 @@ The server project uses the Maven build tool, the client project is currently a 
 - Open Java projects tab
   - Click `rebuild all` icon (tools icon)
 - On top of editor click 'Run Java' icon (play icon)
-
+- Declare a dependency in the section of your POM file.
+Dependency declaration in pom.xml :
+```
+<dependency>
+    <groupId>de.vandermeer</groupId>
+    <artifactId>asciitable</artifactId>
+    <version>0.3.2</version>
+</dependency>
+```
 ### IntelliJ
 
 - Run build to generate `target` folder and jar file
 - Right click jar file and select run
 - IntelliJ should auto assign as current config from then on and you can rebuild and run via top nav buttons
-
+- Declare a dependency in the section of your POM file.
+Dependency declaration in pom.xml :
+```
+<dependency>
+    <groupId>de.vandermeer</groupId>
+    <artifactId>asciitable</artifactId>
+    <version>0.3.2</version>
+</dependency>
+```
 ## JUnit testing
 
 We use the JUnit framework for unit testing our codebase
