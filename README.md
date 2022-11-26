@@ -11,6 +11,7 @@ The server project uses the Maven build tool, the client project is currently a 
 - Maven must be installed to build and run server
   - Directly available https://maven.apache.org/
   - Via HomeBrew `brew install maven`
+  - Termninal command for Linux 'sudo pacman -S maven' for Arch based distros or 'apt-get install maven' for Ubuntu/Debian
 - Install VSCode extension, Extension Pack for Java
 - After opening Server project, on sidebar you should open Maven dropdown panel
   - Click play button by `clean` command

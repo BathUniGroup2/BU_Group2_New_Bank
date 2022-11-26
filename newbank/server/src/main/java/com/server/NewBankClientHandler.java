@@ -12,33 +12,46 @@ public class NewBankClientHandler extends Thread{
 	private final NewBank bank;
 	private final BufferedReader in;
 	private final PrintWriter out;
+	private final CLI cLI;
 
 
 	public NewBankClientHandler(Socket s) throws IOException {
 		bank = NewBank.getBank();
 		in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 		out = new PrintWriter(s.getOutputStream(), true);
+		cLI = new CLI(s);
 	}
 
 	public void run() {
 		// keep getting requests from the client and processing them
+		cLI.displayWelcomeScreen();
 		try {
 			// ask for user name
-			out.println("Enter Username");
+			cLI.displayEnterUsername();
 			String userName = in.readLine();
 			// ask for password
-			out.println("Enter Password");
+			cLI.displayEnterPassword();
 			String password = in.readLine();
-			out.println("Checking Details...");
+			cLI.displayCheckingStatus();
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// handles any possible exception during the call to "sleep()"
+				e.printStackTrace(); // prints the exception stack trace to the console
+				System.exit(0);
+			}
 			// authenticate user and get customer ID token from bank for use in subsequent requests
 			CustomerID customer = bank.checkLogInDetails(userName, password);
 			// if the user is authenticated then get requests from the user and process them
 			if(customer != null) {
-				out.println("Log In Successful. What do you want to do?");
+				cLI.displaySuccessMsg();
+				cLI.displayNavigation();
+				cLI.displayOptions();
 				while(true) {
 					String input = in.readLine();
 					if (input.length() < 1) {
-						out.println("Command required, try again. What do you want to do?");
+						cLI.displayFailMsg();
+						cLI.displayNavigation();
 					} else{
 						// To allow for a CMD arg we split by space
 						String[] inputArray = input.split(" ");
@@ -51,15 +64,17 @@ public class NewBankClientHandler extends Thread{
 						System.out.println("Request from " + customer.getKey());
             // a break condition to exit the banking loop
 					  if (request.equals("QUIT")) {
+						cLI.displayQuit();
 						  break; 
               }
 						String response = bank.processRequest(customer, request, args);
 						out.println(response);
+						cLI.displayNavigation();
 					}
 				}
 			}
 			else {
-				out.println("Log In Failed");
+				cLI.displayFailMsg();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
