@@ -44,7 +44,8 @@ public class NewBank {
 			switch(request) {
 				case "SHOWMYACCOUNTS" : return showMyAccounts(customer);
 				case "NEWACCOUNT" : return newAccount(customer, args);
-				case "MOVE" : return Move(customer, args);
+				case "MOVE" : return move(customer, args);
+				case "PAY" : return pay(customer, args);
 				default : return "FAIL";
 			}
 		}
@@ -152,7 +153,7 @@ public class NewBank {
 		return "SUCCESS";
 	}
 
-	private String Move(CustomerID customer, String[] args) {
+	private String move(CustomerID customer, String[] args) {
 		String from = args[0];
 		String to = args[1];
 		String amount = args[2];
