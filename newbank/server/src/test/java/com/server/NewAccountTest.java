@@ -1,6 +1,6 @@
 package com.server;
 
-import org.junit.Test;
+import  org.junit.Test;
 
 import static org.junit.Assert.*;
 
@@ -25,12 +25,11 @@ public class NewAccountTest{
         assertEquals("FAIL", newAccountString);
     }
     
-    // No argument provided - this currently isn't covered by the NewAccount function.
-    // A ticket is in the backlog to cover IndexOutOfBoundsException and update this test to return SUCCESS or FAIL
-    @Ignore
-    @Test (expected = IndexOutOfBoundsException.class)
+    // No input argument given
+    @Test
     public void nullAccountTest(){
-        bank.processRequest(customerId, "NEWACCOUNT", new String[]{});
+        String newAccountString = bank.processRequest(customerId, "NEWACCOUNT", new String[]{});
+        assertEquals("FAIL", newAccountString);
     }
     
     // New account that doesn't exist created
