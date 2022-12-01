@@ -70,11 +70,11 @@ public class NewBank {
 		return String.join("\n", accountList);
 	}
 
-	private String newAccount(CustomerID customer, String[] accountTypes) {
-		String accountType = accountTypes[0];
-		// Fail if no account type argument was given
-		if (accountType.length() < 1) return "FAIL";
+	private String newAccount(CustomerID customer, String[] args) {
+		// User must input enough arguments
+		if (args == null || args.length < 1) return "FAIL";
 
+		String accountType = args[0];
 		Customer currentCustomer = customers.get(customer.getKey());
 		ArrayList<Account> currentAccounts = currentCustomer.getAccounts();
 
@@ -101,6 +101,9 @@ public class NewBank {
 	 * @return String of "SUCCESS" or "FAIL"
 	 */
 	private String pay(CustomerID customer, String[] args) {
+		// User must input enough arguments
+		if (args == null || args.length < 4) return "FAIL";
+
 		String customerAccountType = args[0];
 		String payee = args[1];
 		String payeeAccountType = args[2];
@@ -153,13 +156,13 @@ public class NewBank {
 		return "SUCCESS";
 	}
 
-	private String move(CustomerID customer, String[] args) {
+	private String Move(CustomerID customer, String[] args) {
+		// User must input enough arguments
+		if (args == null || args.length < 3) return "FAIL";
+
 		String from = args[0];
 		String to = args[1];
 		String amount = args[2];
-
-        // Fail if missing argument from move functionality
-		if (from.length() < 1 || to.length() < 1 || amount.length() < 1) return "FAIL";
 
 		Customer currentCustomer = customers.get(customer.getKey());
 		ArrayList<Account> currentAccounts = currentCustomer.getAccounts();
