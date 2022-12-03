@@ -36,17 +36,11 @@ public class NewBank {
 
 	public synchronized CustomerID checkLogInDetails(String username, String password) {
 		if (customers.containsKey(username)) {
-			if (checkLogin(username, password)) {
+			if (customers.get(username).getPassword().equals(password)) {
 				return new CustomerID(username);
 			}
 		}
-		
-		return null;
-	}
-
-	private boolean checkLogin(final String username, final String password) {
-		assert (customers.containsKey(username));
-		return customers.get(username).getPassword().equals(password);
+		  return null;
 	}
 
 	// commands from the NewBank customer are processed in this method
