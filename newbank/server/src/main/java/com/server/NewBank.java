@@ -7,25 +7,22 @@ public class NewBank {
 
 	private static final NewBank bank = new NewBank();
 	private final HashMap<String,Customer> customers;
-	private static HashMap<String,Password> passwords;
 
 	private NewBank() {
 		customers = new HashMap<>();
-		passwords = new HashMap<>();
 		addTestData();
 	}
 
 	private void addTestData() {
-		Customer bhagy = new Customer("Bhagy", "Bhagy123");
+		Customer bhagy = new Customer();
 		bhagy.addAccount(new Account(Account.AccountType.MAIN, 1000.0));
 		customers.put("Bhagy", bhagy);
-	//	passwords.put("Bhagy", new Password("Bhagy1234"));
 
-		Customer christina = new Customer("Christina", "Christina123");
+		Customer christina = new Customer();
 		christina.addAccount(new Account(Account.AccountType.SAVINGS, 1500.0));
 		customers.put("Christina", christina);
 
-		Customer john = new Customer("John", "test");
+		Customer john = new Customer();
 		john.addAccount(new Account(Account.AccountType.CHECKING, 250.0));
 		customers.put("John", john);
 	}
@@ -34,13 +31,11 @@ public class NewBank {
 		return bank;
 	}
 
-	public synchronized CustomerID checkLogInDetails(String username, String password) {
-		if (customers.containsKey(username)) {
-			if (customers.get(username).getPassword().equals(password)) {
-				return new CustomerID(username);
-			}
+	public synchronized CustomerID checkLogInDetails(String userName, String password) {
+		if(customers.containsKey(userName)) {
+			return new CustomerID(userName);
 		}
-		  return null;
+		return null;
 	}
 
 	// commands from the NewBank customer are processed in this method
@@ -49,7 +44,8 @@ public class NewBank {
 			switch(request) {
 				case "SHOWMYACCOUNTS" : return showMyAccounts(customer);
 				case "NEWACCOUNT" : return newAccount(customer, args);
-				case "MOVE" : return Move(customer, args);
+				case "MOVE" : return move(customer, args);
+				case "PAY" : return pay(customer, args);
 				default : return "FAIL";
 			}
 		}
@@ -74,11 +70,11 @@ public class NewBank {
 		return String.join("\n", accountList);
 	}
 
-	private String newAccount(CustomerID customer, String[] accountTypes) {
-		String accountType = accountTypes[0];
-		// Fail if no account type argument was given
-		if (accountType.length() < 1) return "FAIL";
+	private String newAccount(CustomerID customer, String[] args) {
+		// User must input enough arguments
+		if (args == null || args.length < 1) return "FAIL";
 
+		String accountType = args[0];
 		Customer currentCustomer = customers.get(customer.getKey());
 		ArrayList<Account> currentAccounts = currentCustomer.getAccounts();
 
@@ -105,6 +101,9 @@ public class NewBank {
 	 * @return String of "SUCCESS" or "FAIL"
 	 */
 	private String pay(CustomerID customer, String[] args) {
+		// User must input enough arguments
+		if (args == null || args.length < 4) return "FAIL";
+
 		String customerAccountType = args[0];
 		String payee = args[1];
 		String payeeAccountType = args[2];
@@ -158,12 +157,12 @@ public class NewBank {
 	}
 
 	private String Move(CustomerID customer, String[] args) {
+		// User must input enough arguments
+		if (args == null || args.length < 3) return "FAIL";
+
 		String from = args[0];
 		String to = args[1];
 		String amount = args[2];
-
-        // Fail if missing argument from move functionality
-		if (from.length() < 1 || to.length() < 1 || amount.length() < 1) return "FAIL";
 
 		Customer currentCustomer = customers.get(customer.getKey());
 		ArrayList<Account> currentAccounts = currentCustomer.getAccounts();
