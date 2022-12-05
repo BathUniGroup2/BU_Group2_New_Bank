@@ -57,9 +57,9 @@ public class NewBankClientHandler extends Thread{
 						String[] inputArray = input.split(" ");
 						String request = inputArray[0];
 						String[] args = {};
-						if (inputArray.length == 2 || inputArray.length == 4) {
+						if (inputArray.length > 1) {
 							args = Arrays.copyOfRange(inputArray, 1, inputArray.length);
-						} 
+						}
 
 						System.out.println("Request from " + customer.getKey());
             // a break condition to exit the banking loop
