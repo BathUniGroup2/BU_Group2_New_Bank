@@ -1,5 +1,7 @@
-package com.server;
+package com.server.src.test.java.com.server;
 
+import com.server.src.main.java.com.server.CustomerID;
+import com.server.src.main.java.com.server.NewBank;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

@@ -1,4 +1,4 @@
-package com.server;
+package com.server.src.main.java.com.server;
 
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -6,14 +6,14 @@ import java.util.ArrayList;
 public class NewBank {
 
 	private static final NewBank bank = new NewBank();
-	private final HashMap<String,Customer> customers;
+	private static HashMap<String,Customer> customers = null;
 
 	private NewBank() {
 		customers = new HashMap<>();
 		addTestData();
 	}
 
-	private void addTestData() {
+	private static void addTestData() {
 		Customer bhagy = new Customer();
 		bhagy.addAccount(new Account(Account.AccountType.MAIN, 1000.0));
 		customers.put("Bhagy", bhagy);
@@ -156,7 +156,7 @@ public class NewBank {
 		return "SUCCESS";
 	}
 
-	private String Move(CustomerID customer, String[] args) {
+	private String move(CustomerID customer, String[] args) {
 		// User must input enough arguments
 		if (args == null || args.length < 3) return "FAIL";
 

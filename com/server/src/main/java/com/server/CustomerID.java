@@ -1,4 +1,4 @@
-package com.server;
+package com.server.src.main.java.com.server;
 // no explicit boilerplate constructor needed if a record is used to store the record
 
 public class CustomerID {
