@@ -1,6 +1,8 @@
-package newbank.server;
+package com.server;
 
 public class Account {
+
+
 	public enum AccountType {
 		MAIN("Main"),
 		SAVINGS("Savings"),
