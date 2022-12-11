@@ -8,7 +8,7 @@ public class NewBank {
 	private static final NewBank bank = new NewBank();
 	private final HashMap<String,Customer> customers;
 
-	private NewBank() {
+	public NewBank() {
 		customers = new HashMap<>();
 		addTestData();
 	}
@@ -119,14 +119,21 @@ public class NewBank {
 		Account currentAccount = null;
 		// Fail if customer has no accounts
 		if (currentAccounts.size() < 1) return "FAIL";
+
 		// Fail if customer has no account of corresponding to customerAccountType
 		for (Account _currentAccount : currentAccounts) {
 			if (_currentAccount.getAccountType().toString().equals(customerAccountType)) {
-				// Fail if customer has no sufficient funds in the selected account
-				if (_currentAccount.getBalance() < Double.parseDouble(amount)) {
+				try {
+					// Fail if customer has no sufficient funds in the selected account
+					if (_currentAccount.getBalance() < Double.parseDouble(amount)) {
+						return "FAIL";
+
+					} else {
+						currentAccount = _currentAccount;
+					}
+				} catch (NumberFormatException e) {
+					// Incorrect arg added for arg[2] - must be numeric string
 					return "FAIL";
-				} else {
-					currentAccount = _currentAccount;
 				}
 			}
 		}
@@ -156,7 +163,7 @@ public class NewBank {
 		return "SUCCESS";
 	}
 
-	private String Move(CustomerID customer, String[] args) {
+	private String move(CustomerID customer, String[] args) {
 		// User must input enough arguments
 		if (args == null || args.length < 3) return "FAIL";
 
@@ -166,7 +173,14 @@ public class NewBank {
 
 		Customer currentCustomer = customers.get(customer.getKey());
 		ArrayList<Account> currentAccounts = currentCustomer.getAccounts();
-		double amountDouble = Double.parseDouble(amount);
+		double amountDouble;
+
+		try {
+			amountDouble = Double.parseDouble(amount);
+		} catch (NumberFormatException e) {
+			// Incorrect arg added for arg[2] - must be numeric string
+			return "FAIL";
+		}
 
 		// Fail if user only has one account type
 		if (currentAccounts.size() < 2) return "FAIL";
@@ -205,5 +219,9 @@ public class NewBank {
 			return "FAIL";
 		}
 
+	}
+
+	public HashMap<String,Customer> getCustomers() {
+		return customers;
 	}
 }
