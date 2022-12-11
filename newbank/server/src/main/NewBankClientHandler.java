@@ -46,7 +46,7 @@ public class NewBankClientHandler extends Thread{
 				CustomerID customer = bank.checkLogInDetails(userName, password);
 				// if authentication fails prompt another login attempt until there are attempts left
 				if (customer == null) {
-					cLI.displayFailMsg();
+					cLI.displayLoginFailMsg();
 					cLI.displayTryAgain();
 					loginAttempts--;
 				// if authentication is successful proceed to the sequence that will break the loop

@@ -83,4 +83,9 @@ public class CLI {
     public void displayTryAgain(){
         out.println("Please try again");
     }
+
+    public void displayLoginFailMsg(){
+        out.println("Username and/or password is mistaken.");
+    }
 }
+
