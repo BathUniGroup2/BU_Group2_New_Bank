@@ -1,20 +1,28 @@
-package com.server;
+package newbank.server.src.main;
+import de.vandermeer.asciitable.AsciiTable;
 
+import java.io.Console;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import de.vandermeer.asciitable.AsciiTable;
 
 public class CLI {
 
-    private static PrintWriter out;
+
+    Console c = System.console();
+    PrintWriter out;
+
+
+
     AsciiTable at = new AsciiTable();
     
     public CLI(Socket s) throws IOException {
         out = new PrintWriter(s.getOutputStream(), true);
     }
 
-     public void displayWelcomeScreen(){
+
+
+    public void displayWelcomeScreen(){
         out.flush();
         out.println("███▄▄▄▄      ▄████████  ▄█     █▄      ▀█████████▄    ▄████████ ███▄▄▄▄      ▄█   ▄█▄ ");
         out.println("███▀▀▀██▄   ███    ███ ███     ███       ███    ███  ███    ███ ███▀▀▀██▄   ███ ▄███▀ ");
@@ -64,11 +72,15 @@ public class CLI {
         out.println("Please provide your username");
     }
 
-    public void displayEnterPassword(){
+    public void displayEnterPassword() {
         out.println("Please provide your password");
     }
 
     public void displayNavigation(){
         out.println("What would you like to do next?");
+    }
+
+    public void displayTryAgain(){
+        out.println("Please try again");
     }
 }

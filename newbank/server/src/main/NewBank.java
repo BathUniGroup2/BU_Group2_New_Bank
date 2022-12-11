@@ -1,13 +1,13 @@
-package com.server;
+package newbank.server.src.main;
 
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NewBank {
 
 	private static final NewBank bank = new NewBank();
-	private final HashMap<String,Customer> customers;
-	private static HashMap<String,Password> passwords;
+	private final HashMap<String, Customer> customers;
+	private static HashMap<String, Password> passwords;
 
 	public NewBank() {
 		customers = new HashMap<>();
