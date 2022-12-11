@@ -7,22 +7,25 @@ public class NewBank {
 
 	private static final NewBank bank = new NewBank();
 	private final HashMap<String,Customer> customers;
+	private static HashMap<String,Password> passwords;
 
 	public NewBank() {
 		customers = new HashMap<>();
+		passwords = new HashMap<>();
 		addTestData();
 	}
-
+	
 	private void addTestData() {
-		Customer bhagy = new Customer();
+		Customer bhagy = new Customer("Bhagy", "Bhagy123");
 		bhagy.addAccount(new Account(Account.AccountType.MAIN, 1000.0));
 		customers.put("Bhagy", bhagy);
+		passwords.put("Bhagy", new Password("Bhagy1234"));
 
-		Customer christina = new Customer();
+		Customer christina = new Customer("Christina", "Christina123");
 		christina.addAccount(new Account(Account.AccountType.SAVINGS, 1500.0));
 		customers.put("Christina", christina);
 
-		Customer john = new Customer();
+		Customer john = new Customer("John", "test");
 		john.addAccount(new Account(Account.AccountType.CHECKING, 250.0));
 		customers.put("John", john);
 	}
@@ -31,11 +34,13 @@ public class NewBank {
 		return bank;
 	}
 
-	public synchronized CustomerID checkLogInDetails(String userName, String password) {
-		if(customers.containsKey(userName)) {
-			return new CustomerID(userName);
+	public synchronized CustomerID checkLogInDetails(String username, String password) {
+		if (customers.containsKey(username)) {
+			if (customers.get(username).getPassword().equals(password)) {
+				return new CustomerID(username);
+			}
 		}
-		return null;
+		  return null;
 	}
 
 	// commands from the NewBank customer are processed in this method
@@ -162,6 +167,7 @@ public class NewBank {
 		// succeed if no condition above fails
 		return "SUCCESS";
 	}
+
 
 	private String move(CustomerID customer, String[] args) {
 		// User must input enough arguments
