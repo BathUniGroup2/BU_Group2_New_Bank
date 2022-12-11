@@ -1,5 +1,7 @@
 package com.server;
 
+
+import org.junit.Before;
 import  org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -8,8 +10,13 @@ import org.junit.Ignore;
 
 public class NewAccountTest{
 
-    NewBank bank = NewBank.getBank();
-    CustomerID customerId = new CustomerID("Bhagy");
+    NewBank bank;
+    private CustomerID customerId = new CustomerID("Bhagy");
+
+    @Before
+    public void setup() {
+        bank = new NewBank();
+    }
     
     // Account already exists test
     @Test
@@ -40,5 +47,4 @@ public class NewAccountTest{
         newAccountString = bank.processRequest(customerId, "NEWACCOUNT", new String[]{"Checking"});
         assertEquals("SUCCESS", newAccountString);
     }
-
 }
