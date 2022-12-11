@@ -19,17 +19,17 @@ public class Account {
 		}
 	}
 	private final AccountType type;
-	private final double openingBalance;
+	private double balance;
 
-	public Account(AccountType type, double openingBalance) {
+	public Account(AccountType type, double balance) {
 		this.type = type;
-		this.openingBalance = openingBalance;
+		this.balance = balance;
 	}
 
-	public double getBalance() { return openingBalance; }
+	public double getBalance() { return balance; }
 	
 	public String toString() {
-		return (type.toString() + ": " + openingBalance);
+		return (type.toString() + ": " + balance);
 	}
 
 	public AccountType getAccountType() { return type; }
@@ -44,12 +44,11 @@ public class Account {
 	}
 
 	public double updateBalance(char operand, double amountDouble) {
-		double newBalance = 0;
 		if (operand == '+'){
-			newBalance = openingBalance + amountDouble;
+			balance += amountDouble;
 		} else if (operand == '-'){
-		 	newBalance = openingBalance - amountDouble;
+		 	balance -= amountDouble;
 		}
-		return newBalance;
+		return balance;
 	}
 }
