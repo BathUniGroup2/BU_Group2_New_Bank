@@ -1,4 +1,4 @@
-package newbank.server.src.test.java.com.server;
+package com.server;
 
 import org.junit.Test;
 import org.junit.Before;
