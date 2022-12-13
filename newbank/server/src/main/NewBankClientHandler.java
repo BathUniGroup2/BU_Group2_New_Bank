@@ -1,4 +1,4 @@
-package newbank.server.src.main;
+package com.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -79,6 +79,8 @@ public class NewBankClientHandler extends Thread{
 							break;
 						}
 					}
+				cLI.displayLoginExceededMsg();
+				cLI.displayNavigation();;	
 				break;
 				}
 			}
