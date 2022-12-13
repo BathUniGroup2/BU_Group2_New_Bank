@@ -87,5 +87,9 @@ public class CLI {
     public void displayLoginFailMsg(){
         out.println("Username and/or password is mistaken.");
     }
+
+    public void displayLoginExceededMsg(){
+        out.println("You have exceeded three allowed login attempts.");
+    }
 }
 
