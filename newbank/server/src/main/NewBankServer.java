@@ -1,4 +1,4 @@
-package newbank.server.src.main;
+package com.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
