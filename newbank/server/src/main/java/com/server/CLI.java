@@ -37,6 +37,10 @@ public class CLI {
         at.addRule();
         at.addRow("MOVE", "MOVE (Main, Savings, 100)", "Takes in three arguments, the first is the account money is transferred out of. The second is the account money is transferred in. The last is the amount you'd like to transfer");
         at.addRule();
+        at.addRow("MARKETPLACE", "n/a", "Outputs all current microloans available in the system");
+        at.addRule();
+        at.addRow("MICROLOAN", "MICROLOAN(1000, `Main`, 10.5, 3)", "Creates a new microloan and saves in the system, takes four arguments - amount, account, interest, term in months");
+        at.addRule();
         at.addRow("QUIT", "n/a", "Quits the program");
         at.addRule();
         String rend = at.render();
@@ -45,7 +49,7 @@ public class CLI {
     }
 
     public void displayCheckingStatus(){
-        out.println("Checking the details provided...");
+        out.println("Checking the details provided...\n");
     }
 
     public void displaySuccessMsg(){
@@ -53,7 +57,7 @@ public class CLI {
     }
 
     public void displayFailMsg(){
-        out.println("This action has Failed.");
+        out.println("This action has Failed.\n");
     }
 
     public void displayQuit(){

@@ -26,55 +26,64 @@ public class NewBankClientHandler extends Thread{
 		// keep getting requests from the client and processing them
 		cLI.displayWelcomeScreen();
 		try {
-			// ask for user name
-			cLI.displayEnterUsername();
-			String userName = in.readLine();
-			// ask for password
-			cLI.displayEnterPassword();
-			String password = in.readLine();
-			cLI.displayCheckingStatus();
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// handles any possible exception during the call to "sleep()"
-				e.printStackTrace(); // prints the exception stack trace to the console
-				System.exit(0);
-			}
-			// authenticate user and get customer ID token from bank for use in subsequent requests
-			CustomerID customer = bank.checkLogInDetails(userName, password);
-			// if the user is authenticated then get requests from the user and process them
-			if(customer != null) {
-				cLI.displaySuccessMsg();
-				cLI.displayNavigation();
-				cLI.displayOptions();
-				while(true) {
-					String input = in.readLine();
-					if (input.length() < 1) {
-						cLI.displayFailMsg();
-						cLI.displayNavigation();
-					} else{
-						// To allow for a CMD arg we split by space
-						String[] inputArray = input.split(" ");
-						String request = inputArray[0];
-						String[] args = {};
-						if (inputArray.length > 1) {
-							args = Arrays.copyOfRange(inputArray, 1, inputArray.length);
-						}
+			CustomerID customer;
 
-						System.out.println("Request from " + customer.getKey());
-            // a break condition to exit the banking loop
-					  if (request.equals("QUIT")) {
-						cLI.displayQuit();
-						  break; 
-              }
-						String response = bank.processRequest(customer, request, args);
-						out.println(response);
-						cLI.displayNavigation();
-					}
+			// Keep looping until correct UN/PW are given
+			while(true) {
+				// ask for user name
+				cLI.displayEnterUsername();
+				String userName = in.readLine();
+				// ask for password
+				cLI.displayEnterPassword();
+				String password = in.readLine();
+				cLI.displayCheckingStatus();
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// handles any possible exception during the call to "sleep()"
+					e.printStackTrace(); // prints the exception stack trace to the console
+					System.exit(0);
 				}
-			}
-			else {
+				// authenticate user and get customer ID token from bank for use in subsequent requests
+				customer = bank.checkLogInDetails(userName, password);
+				System.out.println(customer);
+				if (customer != null) break;
 				cLI.displayFailMsg();
+			}
+
+
+			// if the user is authenticated then get requests from the user and process them
+			cLI.displaySuccessMsg();
+			cLI.displayNavigation();
+			cLI.displayOptions();
+
+			while(true) {
+				String input = in.readLine();
+				if (input.length() < 1) {
+					cLI.displayFailMsg();
+					cLI.displayNavigation();
+				} else{
+					// To allow for a CMD arg we split by space
+					String[] inputArray = input.split(" ");
+					String request = inputArray[0];
+					String[] args = {};
+
+					if (inputArray.length > 1) {
+						args = Arrays.copyOfRange(inputArray, 1, inputArray.length);
+					}
+
+					System.out.println("Request from " + customer.getKey());
+
+					// a break condition to exit the banking loop
+				  	if (request.equals("QUIT")) {
+						cLI.displayQuit();
+					  	break;
+		  			}
+
+					String response = bank.processRequest(customer, request, args);
+					out.println(response);
+					cLI.displayNavigation();
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
