@@ -77,8 +77,8 @@ public class NewBank {
 			if (accountType.equals(account)) {
 				hasAccountMatch = true;
 				// User must have enough money in account at the time of loan creation
-				// Loan must be at least one pound
-				if (currentAccount.getBalance() < Double.parseDouble(amount) || Double.parseDouble(amount) < 1) return "FAIL";
+				// Loan must be at least one thousand pounds
+				if (currentAccount.getBalance() < Double.parseDouble(amount) || Double.parseDouble(amount) < 1000) return "FAIL";
 			}
 		}
 
