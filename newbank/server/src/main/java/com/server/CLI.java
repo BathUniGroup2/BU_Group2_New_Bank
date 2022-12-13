@@ -39,7 +39,7 @@ public class CLI {
         at.addRule();
         at.addRow("MARKETPLACE", "n/a", "Outputs all current microloans available in the system");
         at.addRule();
-        at.addRow("MICROLOAN", "MICROLOAN(100, `Main`, 10.5, 3)", "Creates a new microloan and saves in the system, takes four arguments - amount, account, interest, term in months");
+        at.addRow("MICROLOAN", "MICROLOAN(1000, `Main`, 10.5, 3)", "Creates a new microloan and saves in the system, takes four arguments - amount, account, interest, term in months");
         at.addRule();
         at.addRow("QUIT", "n/a", "Quits the program");
         at.addRule();
