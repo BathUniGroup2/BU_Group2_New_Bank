@@ -15,7 +15,7 @@ public class CLI {
 
 
     AsciiTable at = new AsciiTable();
-    
+
     public CLI(Socket s) throws IOException {
         out = new PrintWriter(s.getOutputStream(), true);
     }

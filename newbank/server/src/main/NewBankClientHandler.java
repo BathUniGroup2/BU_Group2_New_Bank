@@ -49,7 +49,7 @@ public class NewBankClientHandler extends Thread{
 					cLI.displayLoginFailMsg();
 					cLI.displayTryAgain();
 					loginAttempts--;
-				// if authentication is successful proceed to the sequence that will break the loop
+					// if authentication is successful proceed to the sequence that will break the loop
 				} else {
 					cLI.displaySuccessMsg();
 					cLI.displayNavigation();
@@ -79,9 +79,9 @@ public class NewBankClientHandler extends Thread{
 							break;
 						}
 					}
-				cLI.displayLoginExceededMsg();
-				cLI.displayNavigation();;	
-				break;
+					cLI.displayLoginExceededMsg();
+					cLI.displayNavigation();;
+					break;
 				}
 			}
 		} catch (IOException e) {
