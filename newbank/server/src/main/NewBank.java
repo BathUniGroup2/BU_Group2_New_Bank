@@ -51,6 +51,7 @@ public class NewBank {
 				case "NEWACCOUNT" : return newAccount(customer, args);
 				case "MOVE" : return move(customer, args);
 				case "PAY" : return pay(customer, args);
+				case "MARKETPLACE" : return marketplace();
 				default : return "FAIL";
 			}
 		}
