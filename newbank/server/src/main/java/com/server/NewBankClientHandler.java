@@ -26,11 +26,9 @@ public class NewBankClientHandler extends Thread{
 		// keep getting requests from the client and processing them
 		cLI.displayWelcomeScreen();
 		try {
-			CustomerID customer;
-
-			// Keep looping until correct UN/PW are given
-			while(true) {
-				// ask for user name
+			int loginAttempts = 3;
+			while (loginAttempts > 0) {
+				// ask for username
 				cLI.displayEnterUsername();
 				String userName = in.readLine();
 				// ask for password
@@ -45,44 +43,45 @@ public class NewBankClientHandler extends Thread{
 					System.exit(0);
 				}
 				// authenticate user and get customer ID token from bank for use in subsequent requests
-				customer = bank.checkLogInDetails(userName, password);
-				System.out.println(customer);
-				if (customer != null) break;
-				cLI.displayFailMsg();
-			}
-
-
-			// if the user is authenticated then get requests from the user and process them
-			cLI.displaySuccessMsg();
-			cLI.displayNavigation();
-			cLI.displayOptions();
-
-			while(true) {
-				String input = in.readLine();
-				if (input.length() < 1) {
-					cLI.displayFailMsg();
+				CustomerID customer = bank.checkLogInDetails(userName, password);
+				// if authentication fails prompt another login attempt until there are attempts left
+				if (customer == null) {
+					cLI.displayLoginFailMsg();
+					cLI.displayTryAgain();
+					loginAttempts--;
+					// if authentication is successful proceed to the sequence that will break the loop
+				} else {
+					cLI.displaySuccessMsg();
 					cLI.displayNavigation();
-				} else{
-					// To allow for a CMD arg we split by space
-					String[] inputArray = input.split(" ");
-					String request = inputArray[0];
-					String[] args = {};
+					cLI.displayOptions();
+					while (true) {
+						String input = in.readLine();
+						if (input.length() < 1) {
+							cLI.displayFailMsg();
+							cLI.displayNavigation();;
+						} else {
+							// To allow for a CMD arg we split by space
+							String[] inputArray = input.split(" ");
+							String request = inputArray[0];
+							String[] args = {};
+							if (inputArray.length > 1) {
+								args = Arrays.copyOfRange(inputArray, 1, inputArray.length);
+							}
 
-					if (inputArray.length > 1) {
-						args = Arrays.copyOfRange(inputArray, 1, inputArray.length);
+							System.out.println("Request from " + customer.getKey());
+							// a break condition to exit the banking loop
+							if (request.equals("QUIT")) {
+								cLI.displayQuit();
+							}
+							String response = bank.processRequest(customer, request, args);
+							out.println(response);
+							cLI.displayNavigation();
+							break;
+						}
 					}
-
-					System.out.println("Request from " + customer.getKey());
-
-					// a break condition to exit the banking loop
-				  	if (request.equals("QUIT")) {
-						cLI.displayQuit();
-					  	break;
-		  			}
-
-					String response = bank.processRequest(customer, request, args);
-					out.println(response);
-					cLI.displayNavigation();
+					cLI.displayLoginExceededMsg();
+					cLI.displayNavigation();;
+					break;
 				}
 			}
 		} catch (IOException e) {
@@ -99,3 +98,5 @@ public class NewBankClientHandler extends Thread{
 		}
 	}
 }
+
+
