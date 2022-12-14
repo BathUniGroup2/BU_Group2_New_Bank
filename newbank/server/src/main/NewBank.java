@@ -1,17 +1,17 @@
 package com.server;
 
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NewBank {
 
 	private static final NewBank bank = new NewBank();
-
-	private final Marketplace marketplace = Marketplace.getMarketplace();
-	private final HashMap<String,Customer> customers;
+	private final HashMap<String, Customer> customers;
+	private static HashMap<String, Password> passwords;
 
 	public NewBank() {
 		customers = new HashMap<>();
+		passwords = new HashMap<>();
 		addTestData();
 	}
 	
@@ -19,6 +19,7 @@ public class NewBank {
 		Customer bhagy = new Customer("Bhagy", "Bhagy123");
 		bhagy.addAccount(new Account(Account.AccountType.MAIN, 1000.0));
 		customers.put("Bhagy", bhagy);
+		passwords.put("Bhagy", new Password("Bhagy1234"));
 
 		Customer christina = new Customer("Christina", "Christina123");
 		christina.addAccount(new Account(Account.AccountType.SAVINGS, 1500.0));
@@ -51,66 +52,11 @@ public class NewBank {
 				case "MOVE" : return move(customer, args);
 				case "PAY" : return pay(customer, args);
 				case "MARKETPLACE" : return marketplace();
-				case "MICROLOAN" : return microloan(customer, args);
 				default : return "FAIL";
 			}
 		}
 		return "FAIL";
 	}
-
-	private String microloan(CustomerID customer, String[] args) {
-		// User must input enough arguments
-		if (args == null || args.length < 4) return "FAIL";
-
-		String amount = args[0];
-		String account = args[1];
-		String interest = args[2];
-		String months = args[3];
-
-		Customer currentCustomer = customers.get(customer.getKey());
-		ArrayList<Account> currentAccounts = currentCustomer.getAccounts();
-		boolean hasAccountMatch = false;
-
-		// Check for a matching account
-		for (Account currentAccount : currentAccounts) {
-			String accountType = currentAccount.getAccountType().toString();
-			if (accountType.equals(account)) {
-				hasAccountMatch = true;
-				// User must have enough money in account at the time of loan creation
-				// Loan must be at least one thousand pounds
-				if (currentAccount.getBalance() < Double.parseDouble(amount) || Double.parseDouble(amount) < 1000) return "FAIL";
-			}
-		}
-
-		// User must have matching account type
-		if (!hasAccountMatch) return "FAIL";
-
-		try {
-			marketplace.addLoan(customer.getKey(), Double.parseDouble(amount), account, Double.parseDouble(interest), Integer.parseInt(months));
-			return "SUCCESS";
-		} catch (Exception e) {
-			return "FAIL";
-		}
-	}
-
-	private String marketplace() {
-		try {
-			ArrayList<Microloan> loans = marketplace.getLoans();
-			String result = "";
-
-			if (loans.size() == 0) return "No microloans on offer currently\n";
-
-			for (Microloan loan : loans) {
-				result += String.format("User: %s, Amount: %.2f, Interest: %.2f, Months: %d \n", loan.getUser(), loan.getAmount(),
-						loan.getInterest(), loan.getMonths());
-			}
-			return result;
-
-		} catch (Exception e) {
-			return "FAIL";
-		}
-	}
-
 	/**
 	 * This method is used to show the customer's accounts
 	 *
